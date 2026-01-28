@@ -50,6 +50,17 @@ export const getProducts = async () => {
                 } catch (e) {
                     console.warn('Error parsing sizes:', e);
                 }
+
+                // Parse images array from JSON string if needed
+                let images = [];
+                try {
+                    if (doc.images) {
+                        images = typeof doc.images === 'string' ? JSON.parse(doc.images) : doc.images;
+                    }
+                } catch (e) {
+                    console.warn('Error parsing images:', e);
+                }
+
                 return {
                     id: doc.$id,
                     name: doc.name,
@@ -57,6 +68,7 @@ export const getProducts = async () => {
                     originalPrice: doc.originalPrice,
                     category: doc.category,
                     image: doc.image,
+                    images: images.length > 0 ? images : (doc.image ? [doc.image] : []),
                     description: doc.description,
                     sizes: sizes,
                     bestseller: doc.bestseller || false,
@@ -333,14 +345,78 @@ export const updateOrderStatus = async (id, status) => {
     return true;
 };
 
+// ========== IMAGE COMPRESSION ==========
+
+const compressImage = (file, maxWidth = 1200, quality = 0.85) => {
+    return new Promise((resolve, reject) => {
+        // Skip compression for small files (< 200KB)
+        if (file.size < 200 * 1024) {
+            console.log('📦 File is small, skipping compression');
+            resolve(file);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                // Calculate new dimensions
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth) {
+                    height = (height * maxWidth) / width;
+                    width = maxWidth;
+                }
+
+                // Create canvas and compress
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Convert to blob
+                canvas.toBlob(
+                    (blob) => {
+                        if (blob) {
+                            // Create a new file with the compressed data
+                            const compressedFile = new File([blob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now()
+                            });
+                            console.log(`🗜️ Compressed: ${(file.size / 1024).toFixed(2)}KB → ${(compressedFile.size / 1024).toFixed(2)}KB`);
+                            resolve(compressedFile);
+                        } else {
+                            resolve(file);
+                        }
+                    },
+                    'image/jpeg',
+                    quality
+                );
+            };
+            img.onerror = () => resolve(file);
+            img.src = event.target.result;
+        };
+        reader.onerror = () => resolve(file);
+        reader.readAsDataURL(file);
+    });
+};
+
 // ========== IMAGE UPLOAD ==========
 
 export const uploadImage = async (file) => {
     console.log('📤 Starting image upload...');
     console.log('   File name:', file.name);
-    console.log('   File size:', (file.size / 1024).toFixed(2) + ' KB');
+    console.log('   Original size:', (file.size / 1024).toFixed(2) + ' KB');
     console.log('   File type:', file.type);
     console.log('   Appwrite connected:', isAppwriteConnected);
+
+    // Compress image first
+    console.log('🗜️ Compressing image...');
+    const compressedFile = await compressImage(file);
+    console.log('   Compressed size:', (compressedFile.size / 1024).toFixed(2) + ' KB');
 
     // Check connection first
     if (!isAppwriteConnected) {
@@ -357,7 +433,7 @@ export const uploadImage = async (file) => {
             const response = await storage.createFile(
                 STORAGE_BUCKET,
                 ID.unique(),
-                file
+                compressedFile
             );
 
             console.log('✅ File uploaded successfully!');
@@ -394,6 +470,22 @@ export const uploadImage = async (file) => {
             console.error('❌ Base64 conversion failed:', error);
             reject(error);
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(compressedFile);
     });
 };
+
+// Upload multiple images
+export const uploadMultipleImages = async (files) => {
+    console.log(`📤 Uploading ${files.length} images...`);
+    const urls = [];
+
+    for (let i = 0; i < files.length; i++) {
+        console.log(`   Uploading image ${i + 1}/${files.length}`);
+        const url = await uploadImage(files[i]);
+        urls.push(url);
+    }
+
+    console.log('✅ All images uploaded!', urls);
+    return urls;
+};
+

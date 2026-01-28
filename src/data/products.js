@@ -168,7 +168,7 @@ export const defaultCategories = [
 ];
 
 // WhatsApp number for orders
-export const WHATSAPP_NUMBER = '+91XXXXXXXXXX';
+export const WHATSAPP_NUMBER = '+919605996444';
 
 // Delivery threshold for free shipping
 export const FREE_DELIVERY_THRESHOLD = 999;
