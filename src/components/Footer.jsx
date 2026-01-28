@@ -11,7 +11,6 @@ const Footer = () => {
                     {/* Brand Section */}
                     <div className="footer-brand">
                         <Link to="/" className="footer-logo">
-                            <img src="/logo.jpeg" alt="Cantik" className="footer-logo-image" />
                             <span className="footer-logo-text">Cantik</span>
                         </Link>
                         <p className="footer-tagline">Elegance in Every Stitch</p>
@@ -49,7 +48,7 @@ const Footer = () => {
                         <h4 className="footer-title">Contact Us</h4>
                         <div className="footer-contact">
                             <a
-                                href="https://wa.me/91XXXXXXXXXX"
+                                href="https://wa.me/919605996444"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="whatsapp-link"
