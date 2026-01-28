@@ -73,13 +73,6 @@ const HomePage = () => {
                                 className="category-card"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
-                                <div className="category-image-container">
-                                    <img
-                                        src={category.image || `https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&q=80`}
-                                        alt={category.name}
-                                        className="category-image"
-                                    />
-                                </div>
                                 <h3 className="category-name">{category.name}</h3>
                             </Link>
                         ))}
