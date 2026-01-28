@@ -24,7 +24,6 @@ const Header = () => {
                 <div className="header-container">
                     {/* Logo */}
                     <Link to="/" className="header-logo">
-                        <img src="/logo.jpeg" alt="Cantik" className="logo-image" />
                         <span className="logo-text">Cantik</span>
                     </Link>
 

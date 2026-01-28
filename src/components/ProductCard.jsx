@@ -1,29 +1,38 @@
 import { useState } from 'react';
+import { useCart } from '../context/CartContext';
 import SizeSelector from './SizeSelector';
 import './ProductCard.css';
 
-const ProductCard = ({ product, onAddToCart }) => {
+const ProductCard = ({ product }) => {
     const [showSizeModal, setShowSizeModal] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
+    const { addItem } = useCart();
 
-    const discountPercent = Math.round(
-        ((product.originalPrice - product.price) / product.originalPrice) * 100
-    );
+    const discount = product.originalPrice > product.price
+        ? Math.round((1 - product.price / product.originalPrice) * 100)
+        : 0;
 
     const handleAddToCart = () => {
         setShowSizeModal(true);
     };
 
     const handleSizeSelect = (size) => {
-        onAddToCart(product, size);
+        addItem({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            originalPrice: product.originalPrice,
+            image: product.image,
+            size: size
+        });
         setShowSizeModal(false);
     };
 
     return (
         <>
-            <article className="product-card">
-                <div className="product-image-container">
-                    {!imageLoaded && <div className="product-image-skeleton skeleton" />}
+            <div className="product-card">
+                <div className="product-image-wrapper">
+                    {!imageLoaded && <div className="product-image-skeleton shimmer"></div>}
                     <img
                         src={product.image}
                         alt={product.name}
@@ -31,47 +40,50 @@ const ProductCard = ({ product, onAddToCart }) => {
                         onLoad={() => setImageLoaded(true)}
                         loading="lazy"
                     />
-
-                    {/* Badges */}
-                    <div className="product-badges">
-                        {product.bestseller && (
-                            <span className="badge badge-accent">Bestseller</span>
-                        )}
-                        {product.newArrival && (
-                            <span className="badge badge-primary">New</span>
-                        )}
-                        {discountPercent > 0 && (
-                            <span className="badge badge-success">-{discountPercent}%</span>
-                        )}
-                    </div>
-
-                    {/* Quick Add Button */}
-                    <button
-                        className="quick-add-btn"
-                        onClick={handleAddToCart}
-                        disabled={!product.inStock}
-                    >
-                        {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-                    </button>
+                    {product.bestseller && (
+                        <span className="product-badge bestseller">Bestseller</span>
+                    )}
+                    {product.newArrival && (
+                        <span className="product-badge new">New</span>
+                    )}
+                    {discount > 0 && (
+                        <span className="product-badge discount">-{discount}%</span>
+                    )}
                 </div>
 
                 <div className="product-info">
-                    <p className="product-category">{product.category}</p>
                     <h3 className="product-name">{product.name}</h3>
-                    <div className="product-pricing">
-                        <span className="price">₹{product.price.toLocaleString()}</span>
-                        {product.originalPrice > product.price && (
-                            <span className="price-original">₹{product.originalPrice.toLocaleString()}</span>
-                        )}
+                    <p className="product-category">{product.category}</p>
+                    <div className="product-price-row">
+                        <div className="product-prices">
+                            <span className="product-price">₹{product.price.toLocaleString()}</span>
+                            {product.originalPrice > product.price && (
+                                <span className="product-original-price">₹{product.originalPrice.toLocaleString()}</span>
+                            )}
+                        </div>
                     </div>
+                    <button
+                        className="add-to-cart-btn"
+                        onClick={handleAddToCart}
+                        disabled={!product.inStock}
+                    >
+                        {product.inStock ? (
+                            <>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                                    <line x1="3" y1="6" x2="21" y2="6" />
+                                    <path d="M16 10a4 4 0 0 1-8 0" />
+                                </svg>
+                                Add to Cart
+                            </>
+                        ) : 'Out of Stock'}
+                    </button>
                 </div>
-            </article>
+            </div>
 
-            {/* Size Selection Modal */}
             {showSizeModal && (
                 <SizeSelector
                     product={product}
-                    sizes={product.sizes}
                     onSelect={handleSizeSelect}
                     onClose={() => setShowSizeModal(false)}
                 />
