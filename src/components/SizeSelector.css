@@ -1,0 +1,110 @@
+.size-modal {
+    max-width: 420px;
+}
+
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    color: var(--color-text-light);
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: var(--color-background);
+    color: var(--color-text);
+}
+
+/* Product Preview */
+.size-product-preview {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.preview-image {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+}
+
+.preview-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.preview-name {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+.preview-price {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Size Options */
+.size-options {
+    margin-bottom: var(--spacing-lg);
+}
+
+.size-label {
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+}
+
+.size-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.size-btn {
+    min-width: 50px;
+    height: 44px;
+    padding: 0 var(--spacing-md);
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--color-text);
+    transition: all var(--transition-fast);
+}
+
+.size-btn:hover {
+    border-color: var(--color-primary);
+}
+
+.size-btn.selected {
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
+    color: white;
+}
+
+/* Size Guide */
+.size-guide-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.85rem;
+    color: var(--color-primary-dark);
+    cursor: pointer;
+}
+
+.size-guide-link:hover {
+    text-decoration: underline;
+}

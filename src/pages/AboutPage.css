@@ -1,0 +1,232 @@
+/* ===== ABOUT HERO ===== */
+.about-hero {
+    position: relative;
+    height: 50vh;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.about-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+            rgba(92, 61, 94, 0.9) 0%,
+            rgba(92, 61, 94, 0.7) 100%);
+}
+
+.about-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.about-hero-content h1 {
+    font-size: 3rem;
+    color: white;
+    margin-bottom: var(--spacing-md);
+}
+
+.about-hero-subtitle {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--color-primary-light);
+}
+
+/* ===== STORY SECTION ===== */
+.about-story {
+    background: var(--color-surface);
+}
+
+.story-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: var(--spacing-3xl);
+    align-items: center;
+}
+
+.story-text h2 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.story-text .lead {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-lg);
+}
+
+.story-text p {
+    color: var(--color-text-light);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-md);
+}
+
+.story-image img {
+    width: 100%;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ===== WHY CHOOSE SECTION ===== */
+.why-choose-section {
+    background: var(--color-background);
+}
+
+.why-choose-section h2 {
+    margin-bottom: var(--spacing-3xl);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+}
+
+.feature-card {
+    background: var(--color-surface);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    transition: all var(--transition-normal);
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+    color: var(--color-secondary);
+    border-radius: var(--radius-full);
+}
+
+.feature-card h3 {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-secondary);
+}
+
+.feature-card p {
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* ===== CONTACT SECTION ===== */
+.contact-section {
+    background: var(--color-surface);
+}
+
+.contact-card {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: var(--spacing-2xl);
+    align-items: center;
+    padding: var(--spacing-2xl);
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.contact-content {
+    color: white;
+}
+
+.contact-content h2 {
+    color: white;
+    margin-bottom: var(--spacing-md);
+}
+
+.contact-content p {
+    opacity: 0.9;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: var(--spacing-xl);
+}
+
+.contact-image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+    .story-content {
+        grid-template-columns: 1fr;
+    }
+
+    .story-image {
+        order: -1;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .contact-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .contact-image {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-hero {
+        height: 40vh;
+        min-height: 300px;
+    }
+
+    .about-hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .feature-card {
+        padding: var(--spacing-lg);
+    }
+
+    .contact-card {
+        padding: var(--spacing-lg);
+    }
+}
