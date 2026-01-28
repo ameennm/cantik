@@ -166,7 +166,49 @@ export const updateProduct = async (id, product) => {
 export const deleteProduct = async (id) => {
     try {
         if (isAppwriteConnected && !id.startsWith('local_')) {
+            // First, get the product to find the image URL(s)
+            const product = await databases.getDocument(DATABASE_ID, PRODUCTS_COLLECTION, id);
+
+            // Delete the product document
             await databases.deleteDocument(DATABASE_ID, PRODUCTS_COLLECTION, id);
+
+            // Delete the main image from storage if it exists
+            if (product.image && product.image.includes('/storage/buckets/')) {
+                try {
+                    const fileId = extractFileIdFromUrl(product.image);
+                    if (fileId) {
+                        await storage.deleteFile(STORAGE_BUCKET, fileId);
+                        console.log('🗑️ Deleted image from storage:', fileId);
+                    }
+                } catch (imgError) {
+                    console.error('Error deleting image:', imgError);
+                }
+            }
+
+            // Delete additional images if they exist
+            if (product.images) {
+                let images = [];
+                try {
+                    images = typeof product.images === 'string' ? JSON.parse(product.images) : product.images;
+                } catch (e) {
+                    images = [];
+                }
+
+                for (const imgUrl of images) {
+                    if (imgUrl && imgUrl.includes('/storage/buckets/')) {
+                        try {
+                            const fileId = extractFileIdFromUrl(imgUrl);
+                            if (fileId) {
+                                await storage.deleteFile(STORAGE_BUCKET, fileId);
+                                console.log('🗑️ Deleted additional image from storage:', fileId);
+                            }
+                        } catch (imgError) {
+                            console.error('Error deleting additional image:', imgError);
+                        }
+                    }
+                }
+            }
+
             return true;
         }
     } catch (error) {
@@ -178,6 +220,14 @@ export const deleteProduct = async (id) => {
     const filtered = products.filter(p => p.id !== id);
     localStorage.setItem('cantik_products', JSON.stringify(filtered));
     return true;
+};
+
+// Helper function to extract file ID from Appwrite storage URL
+const extractFileIdFromUrl = (url) => {
+    if (!url) return null;
+    // URL format: .../storage/buckets/{bucketId}/files/{fileId}/view...
+    const match = url.match(/\/files\/([a-zA-Z0-9]+)\/view/);
+    return match ? match[1] : null;
 };
 
 // ========== CATEGORIES ==========
