@@ -363,11 +363,14 @@ export const uploadImage = async (file) => {
             console.log('✅ File uploaded successfully!');
             console.log('   File ID:', response.$id);
 
-            // Get the file URL
-            const fileUrl = storage.getFileView(STORAGE_BUCKET, response.$id);
-            console.log('🔗 File URL:', fileUrl.href);
+            // Build the file URL manually (Appwrite SDK v15+)
+            const endpoint = 'https://sgp.cloud.appwrite.io/v1';
+            const projectId = '6979e02200167e338b86';
+            const fileUrl = `${endpoint}/storage/buckets/${STORAGE_BUCKET}/files/${response.$id}/view?project=${projectId}`;
 
-            return fileUrl.href;
+            console.log('🔗 File URL:', fileUrl);
+
+            return fileUrl;
         } else {
             console.log('⚠️ Appwrite not connected, using base64 fallback');
         }
