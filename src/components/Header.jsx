@@ -24,7 +24,7 @@ const Header = () => {
                 <div className="header-container">
                     {/* Logo */}
                     <Link to="/" className="header-logo">
-                        <span className="logo-text">Cantik</span>
+                        <img src="/cantik-logo.jpg" alt="Cantik" className="logo-image" />
                     </Link>
 
                     {/* Desktop Navigation */}

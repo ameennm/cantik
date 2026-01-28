@@ -141,22 +141,25 @@
     justify-content: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--color-secondary);
-    color: white;
+    background: var(--color-primary);
+    color: #1a1a1a;
     border-radius: var(--radius-md);
     font-size: 0.85rem;
     font-weight: 600;
     transition: all var(--transition-fast);
+    border: none;
 }
 
 .add-to-cart-btn:hover:not(:disabled) {
-    background: var(--color-secondary-light);
+    background: var(--color-primary-dark);
+    color: white;
     transform: scale(1.02);
 }
 
 .add-to-cart-btn:disabled {
     background: var(--color-text-muted);
     cursor: not-allowed;
+    color: white;
 }
 
 /* Responsive */
